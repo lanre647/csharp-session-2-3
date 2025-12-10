@@ -1,660 +1,755 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>C# Study Helper</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
 
-        .header {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin-bottom: 30px;
-            text-align: center;
-        }
+      .header {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        margin-bottom: 30px;
+        text-align: center;
+      }
 
+      .header h1 {
+        color: #667eea;
+        font-size: 2.5em;
+        margin-bottom: 10px;
+      }
+
+      .header p {
+        color: #666;
+        font-size: 1.1em;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+      }
+
+      .tab-btn {
+        background: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;
+        color: #333;
+        transition: all 0.3s;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .tab-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 7px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .tab-btn.active {
+        background: #667eea;
+        color: white;
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      .notes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+      }
+
+      .note-card {
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s;
+      }
+
+      .note-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .note-card h3 {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+        color: #333;
+      }
+
+      .note-card ul {
+        list-style: none;
+      }
+
+      .note-card li {
+        margin-bottom: 10px;
+        padding-left: 20px;
+        position: relative;
+        color: #555;
+      }
+
+      .note-card li:before {
+        content: '▸';
+        position: absolute;
+        left: 0;
+        color: #667eea;
+      }
+
+      .yellow {
+        background: #fef3c7;
+      }
+      .blue {
+        background: #dbeafe;
+      }
+      .green {
+        background: #d1fae5;
+      }
+      .purple {
+        background: #e9d5ff;
+      }
+      .pink {
+        background: #fce7f3;
+      }
+      .orange {
+        background: #fed7aa;
+      }
+
+      .quiz-container,
+      .challenges-container {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .question {
+        background: #f9fafb;
+        padding: 25px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+      }
+
+      .question h3 {
+        color: #667eea;
+        margin-bottom: 15px;
+        font-size: 1.3em;
+      }
+
+      .question-text {
+        background: #1f2937;
+        color: #10b981;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        font-family: 'Courier New', monospace;
+        white-space: pre-line;
+        font-size: 0.9em;
+      }
+
+      .options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .option {
+        padding: 15px;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+        background: white;
+      }
+
+      .option:hover {
+        border-color: #667eea;
+        background: #f3f4f6;
+      }
+
+      .option.selected {
+        border-color: #667eea;
+        background: #eef2ff;
+      }
+
+      .option.correct {
+        border-color: #10b981;
+        background: #d1fae5;
+      }
+
+      .option.incorrect {
+        border-color: #ef4444;
+        background: #fee2e2;
+      }
+
+      .btn {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;
+        transition: all 0.3s;
+        width: 100%;
+        margin-top: 20px;
+      }
+
+      .btn:hover {
+        background: #5568d3;
+      }
+
+      .btn:disabled {
+        background: #d1d5db;
+        cursor: not-allowed;
+      }
+
+      .score {
+        text-align: center;
+        padding: 30px;
+        margin-bottom: 30px;
+      }
+
+      .score h2 {
+        color: #667eea;
+        font-size: 2em;
+        margin-bottom: 10px;
+      }
+
+      .score .points {
+        font-size: 4em;
+        font-weight: bold;
+        color: #667eea;
+        margin: 20px 0;
+      }
+
+      .explanation {
+        background: #fef3c7;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 10px;
+        border-left: 4px solid #f59e0b;
+      }
+
+      .explanation strong {
+        color: #92400e;
+      }
+
+      .challenge {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .challenge h3 {
+        color: #667eea;
+        font-size: 1.5em;
+        margin-bottom: 15px;
+      }
+
+      .hint {
+        background: #fef3c7;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 15px 0;
+        border-left: 4px solid #f59e0b;
+      }
+
+      .solution {
+        margin-top: 15px;
+      }
+
+      .solution summary {
+        cursor: pointer;
+        color: #667eea;
+        font-weight: bold;
+        padding: 10px;
+        background: #f3f4f6;
+        border-radius: 5px;
+      }
+
+      .solution pre {
+        background: #1f2937;
+        color: #10b981;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 10px;
+        overflow-x: auto;
+        font-family: 'Courier New', monospace;
+      }
+
+      .bonus {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 25px;
+        border-radius: 10px;
+        margin-top: 25px;
+      }
+
+      .bonus h3 {
+        font-size: 1.8em;
+        margin-bottom: 15px;
+      }
+
+      .bonus ul {
+        list-style: none;
+      }
+
+      .bonus li {
+        padding: 8px 0;
+        font-size: 1.1em;
+      }
+
+      @media (max-width: 768px) {
         .header h1 {
-            color: #667eea;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            color: #666;
-            font-size: 1.1em;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        .tab-btn {
-            background: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-            color: #333;
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .tab-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 7px 20px rgba(0,0,0,0.2);
-        }
-
-        .tab-btn.active {
-            background: #667eea;
-            color: white;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
+          font-size: 1.8em;
         }
 
         .notes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+          grid-template-columns: 1fr;
         }
-
-        .note-card {
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            transition: transform 0.3s;
-        }
-
-        .note-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .note-card h3 {
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .note-card ul {
-            list-style: none;
-        }
-
-        .note-card li {
-            margin-bottom: 10px;
-            padding-left: 20px;
-            position: relative;
-            color: #555;
-        }
-
-        .note-card li:before {
-            content: "▸";
-            position: absolute;
-            left: 0;
-            color: #667eea;
-        }
-
-        .yellow { background: #fef3c7; }
-        .blue { background: #dbeafe; }
-        .green { background: #d1fae5; }
-        .purple { background: #e9d5ff; }
-        .pink { background: #fce7f3; }
-        .orange { background: #fed7aa; }
-
-        .quiz-container, .challenges-container {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .question {
-            background: #f9fafb;
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-        }
-
-        .question h3 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-        }
-
-        .question-text {
-            background: #1f2937;
-            color: #10b981;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            font-family: 'Courier New', monospace;
-            white-space: pre-line;
-            font-size: 0.9em;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .option {
-            padding: 15px;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: white;
-        }
-
-        .option:hover {
-            border-color: #667eea;
-            background: #f3f4f6;
-        }
-
-        .option.selected {
-            border-color: #667eea;
-            background: #eef2ff;
-        }
-
-        .option.correct {
-            border-color: #10b981;
-            background: #d1fae5;
-        }
-
-        .option.incorrect {
-            border-color: #ef4444;
-            background: #fee2e2;
-        }
-
-        .btn {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-            transition: all 0.3s;
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        .btn:hover {
-            background: #5568d3;
-        }
-
-        .btn:disabled {
-            background: #d1d5db;
-            cursor: not-allowed;
-        }
-
-        .score {
-            text-align: center;
-            padding: 30px;
-            margin-bottom: 30px;
-        }
-
-        .score h2 {
-            color: #667eea;
-            font-size: 2em;
-            margin-bottom: 10px;
-        }
-
-        .score .points {
-            font-size: 4em;
-            font-weight: bold;
-            color: #667eea;
-            margin: 20px 0;
-        }
-
-        .explanation {
-            background: #fef3c7;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 10px;
-            border-left: 4px solid #f59e0b;
-        }
-
-        .explanation strong {
-            color: #92400e;
-        }
-
-        .challenge {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .challenge h3 {
-            color: #667eea;
-            font-size: 1.5em;
-            margin-bottom: 15px;
-        }
-
-        .hint {
-            background: #fef3c7;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            border-left: 4px solid #f59e0b;
-        }
-
-        .solution {
-            margin-top: 15px;
-        }
-
-        .solution summary {
-            cursor: pointer;
-            color: #667eea;
-            font-weight: bold;
-            padding: 10px;
-            background: #f3f4f6;
-            border-radius: 5px;
-        }
-
-        .solution pre {
-            background: #1f2937;
-            color: #10b981;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 10px;
-            overflow-x: auto;
-            font-family: 'Courier New', monospace;
-        }
-
-        .bonus {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 10px;
-            margin-top: 25px;
-        }
-
-        .bonus h3 {
-            font-size: 1.8em;
-            margin-bottom: 15px;
-        }
-
-        .bonus ul {
-            list-style: none;
-        }
-
-        .bonus li {
-            padding: 8px 0;
-            font-size: 1.1em;
-        }
-
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8em;
-            }
-            
-            .notes-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <div class="header">
-            <h1>🎓 C# Study Helper</h1>
-            <p>Sessions 2 & 3: Variables, Data Types, Operators</p>
+      <div class="header">
+        <h1>🎓 C# Study Helper</h1>
+        <p>Sessions 2 & 3: Variables, Data Types, Operators</p>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('notes', this)">
+          📝 Sticky Notes
+        </button>
+        <button class="tab-btn" onclick="showTab('quiz', this)">
+          ✅ Practice Quiz
+        </button>
+        <button class="tab-btn" onclick="showTab('challenges', this)">
+          💻 Coding Challenges
+        </button>
+      </div>
+
+      <div id="notes" class="tab-content active">
+        <div class="notes-grid">
+          <div class="note-card yellow">
+            <h3>Variables 📦</h3>
+            <ul>
+              <li>Think of variables as labeled boxes that store data</li>
+              <li>Must declare TYPE before using: int age = 25;</li>
+              <li>Use var for implicit typing: var name = "John";</li>
+              <li>Naming: Use camelCase, start with letter, no spaces!</li>
+            </ul>
+          </div>
+
+          <div class="note-card blue">
+            <h3>Data Types 🎯</h3>
+            <ul>
+              <li>Value Types: Store actual values (int, float, bool)</li>
+              <li>Reference Types: Store memory addresses (string, object)</li>
+              <li>int: whole numbers (-2B to 2B)</li>
+              <li>double: decimals (15-16 digits precision)</li>
+              <li>bool: true or false only</li>
+              <li>string: text in double quotes</li>
+            </ul>
+          </div>
+
+          <div class="note-card green">
+            <h3>Operators ➕➖</h3>
+            <ul>
+              <li>Arithmetic: + - * / % (modulo gives remainder)</li>
+              <li>Comparison: == != &lt; &gt; &lt;= &gt;=</li>
+              <li>Logical: && (AND) || (OR) ! (NOT)</li>
+              <li>Assignment: = += -= *= /=</li>
+              <li>++ adds 1, -- subtracts 1</li>
+              <li>Order matters! Use () to control precedence</li>
+            </ul>
+          </div>
+
+          <div class="note-card purple">
+            <h3>Type Conversion 🔄</h3>
+            <ul>
+              <li>Implicit: Automatic (int → double)</li>
+              <li>Explicit: Manual with (type) cast</li>
+              <li>Boxing: value type → object</li>
+              <li>Unboxing: object → value type</li>
+              <li>Convert.ToInt32() for string to int</li>
+              <li>ToString() converts anything to string</li>
+            </ul>
+          </div>
+
+          <div class="note-card pink">
+            <h3>Console I/O 💻</h3>
+            <ul>
+              <li>Console.WriteLine() - prints with new line</li>
+              <li>Console.Write() - prints without new line</li>
+              <li>Console.ReadLine() - reads user input as string</li>
+              <li>Placeholders: {0}, {1}, {2} for formatting</li>
+              <li>Always convert input: Convert.ToInt32(Console.ReadLine())</li>
+            </ul>
+          </div>
+
+          <div class="note-card orange">
+            <h3>Quick Tips 💡</h3>
+            <ul>
+              <li>// for single-line comments</li>
+              <li>/* */ for multi-line comments</li>
+              <li>const for unchanging values</li>
+              <li>Escape sequences: \n (newline) \t (tab)</li>
+              <li>Keywords are RESERVED - can't use as names</li>
+              <li>C# is case-sensitive: age ≠ Age</li>
+            </ul>
+          </div>
         </div>
+      </div>
 
-        <div class="tabs">
-            <button class="tab-btn active" onclick="showTab('notes', this)">📝 Sticky Notes</button>
-            <button class="tab-btn" onclick="showTab('quiz', this)">✅ Practice Quiz</button>
-            <button class="tab-btn" onclick="showTab('challenges', this)">💻 Coding Challenges</button>
+      <div id="quiz" class="tab-content">
+        <div class="quiz-container">
+          <div id="quiz-questions"></div>
+          <button class="btn" id="submit-btn" onclick="submitQuiz()">
+            Submit Answers
+          </button>
+          <button
+            class="btn"
+            id="reset-btn"
+            onclick="resetQuiz()"
+            style="display: none"
+          >
+            Try Again
+          </button>
         </div>
+      </div>
 
-        <div id="notes" class="tab-content active">
-            <div class="notes-grid">
-                <div class="note-card yellow">
-                    <h3>Variables 📦</h3>
-                    <ul>
-                        <li>Think of variables as labeled boxes that store data</li>
-                        <li>Must declare TYPE before using: int age = 25;</li>
-                        <li>Use var for implicit typing: var name = "John";</li>
-                        <li>Naming: Use camelCase, start with letter, no spaces!</li>
-                    </ul>
-                </div>
-
-                <div class="note-card blue">
-                    <h3>Data Types 🎯</h3>
-                    <ul>
-                        <li>Value Types: Store actual values (int, float, bool)</li>
-                        <li>Reference Types: Store memory addresses (string, object)</li>
-                        <li>int: whole numbers (-2B to 2B)</li>
-                        <li>double: decimals (15-16 digits precision)</li>
-                        <li>bool: true or false only</li>
-                        <li>string: text in double quotes</li>
-                    </ul>
-                </div>
-
-                <div class="note-card green">
-                    <h3>Operators ➕➖</h3>
-                    <ul>
-                        <li>Arithmetic: + - * / % (modulo gives remainder)</li>
-                        <li>Comparison: == != &lt; &gt; &lt;= &gt;=</li>
-                        <li>Logical: && (AND) || (OR) ! (NOT)</li>
-                        <li>Assignment: = += -= *= /=</li>
-                        <li>++ adds 1, -- subtracts 1</li>
-                        <li>Order matters! Use () to control precedence</li>
-                    </ul>
-                </div>
-
-                <div class="note-card purple">
-                    <h3>Type Conversion 🔄</h3>
-                    <ul>
-                        <li>Implicit: Automatic (int → double)</li>
-                        <li>Explicit: Manual with (type) cast</li>
-                        <li>Boxing: value type → object</li>
-                        <li>Unboxing: object → value type</li>
-                        <li>Convert.ToInt32() for string to int</li>
-                        <li>ToString() converts anything to string</li>
-                    </ul>
-                </div>
-
-                <div class="note-card pink">
-                    <h3>Console I/O 💻</h3>
-                    <ul>
-                        <li>Console.WriteLine() - prints with new line</li>
-                        <li>Console.Write() - prints without new line</li>
-                        <li>Console.ReadLine() - reads user input as string</li>
-                        <li>Placeholders: {0}, {1}, {2} for formatting</li>
-                        <li>Always convert input: Convert.ToInt32(Console.ReadLine())</li>
-                    </ul>
-                </div>
-
-                <div class="note-card orange">
-                    <h3>Quick Tips 💡</h3>
-                    <ul>
-                        <li>// for single-line comments</li>
-                        <li>/* */ for multi-line comments</li>
-                        <li>const for unchanging values</li>
-                        <li>Escape sequences: \n (newline) \t (tab)</li>
-                        <li>Keywords are RESERVED - can't use as names</li>
-                        <li>C# is case-sensitive: age ≠ Age</li>
-                    </ul>
-                </div>
+      <div id="challenges" class="tab-content">
+        <div class="challenges-container">
+          <div class="challenge">
+            <h3>Challenge 1: Variable Swap</h3>
+            <p>Swap two variables without using a third variable</p>
+            <div class="hint">
+              💡 <strong>Hint:</strong> Use arithmetic operations!
             </div>
-        </div>
-
-        <div id="quiz" class="tab-content">
-            <div class="quiz-container">
-                <div id="quiz-questions"></div>
-                <button class="btn" id="submit-btn" onclick="submitQuiz()">Submit Answers</button>
-                <button class="btn" id="reset-btn" onclick="resetQuiz()" style="display:none;">Try Again</button>
-            </div>
-        </div>
-
-        <div id="challenges" class="tab-content">
-            <div class="challenges-container">
-                <div class="challenge">
-                    <h3>Challenge 1: Variable Swap</h3>
-                    <p>Swap two variables without using a third variable</p>
-                    <div class="hint">💡 <strong>Hint:</strong> Use arithmetic operations!</div>
-                    <details class="solution">
-                        <summary>Show Solution</summary>
-                        <pre>int a = 5, b = 10;
+            <details class="solution">
+              <summary>Show Solution</summary>
+              <pre>
+int a = 5, b = 10;
 a = a + b;
 b = a - b;
-a = a - b;</pre>
-                    </details>
-                </div>
+a = a - b;</pre
+              >
+            </details>
+          </div>
 
-                <div class="challenge">
-                    <h3>Challenge 2: Even or Odd</h3>
-                    <p>Write code to check if a number is even or odd using modulo</p>
-                    <div class="hint">💡 <strong>Hint:</strong> Use the % operator</div>
-                    <details class="solution">
-                        <summary>Show Solution</summary>
-                        <pre>int num = 7;
+          <div class="challenge">
+            <h3>Challenge 2: Even or Odd</h3>
+            <p>Write code to check if a number is even or odd using modulo</p>
+            <div class="hint">💡 <strong>Hint:</strong> Use the % operator</div>
+            <details class="solution">
+              <summary>Show Solution</summary>
+              <pre>
+int num = 7;
 if (num % 2 == 0)
     Console.WriteLine("Even");
 else
-    Console.WriteLine("Odd");</pre>
-                    </details>
-                </div>
+    Console.WriteLine("Odd");</pre
+              >
+            </details>
+          </div>
 
-                <div class="challenge">
-                    <h3>Challenge 3: Temperature Converter</h3>
-                    <p>Convert Celsius to Fahrenheit: F = (C × 9/5) + 32</p>
-                    <div class="hint">💡 <strong>Hint:</strong> Watch out for integer division!</div>
-                    <details class="solution">
-                        <summary>Show Solution</summary>
-                        <pre>double celsius = 25;
-double fahrenheit = (celsius * 9.0 / 5.0) + 32;
-Console.WriteLine(fahrenheit);</pre>
-                    </details>
-                </div>
-
-                <div class="bonus">
-                    <h3>🚀 Practice More!</h3>
-                    <ul>
-                        <li>• Create a calculator that performs all basic operations</li>
-                        <li>• Write a program to find the largest of 3 numbers</li>
-                        <li>• Build a grade calculator (percentage to letter grade)</li>
-                        <li>• Create a simple interest calculator</li>
-                        <li>• Make a BMI (Body Mass Index) calculator</li>
-                    </ul>
-                </div>
+          <div class="challenge">
+            <h3>Challenge 3: Temperature Converter</h3>
+            <p>Convert Celsius to Fahrenheit: F = (C × 9/5) + 32</p>
+            <div class="hint">
+              💡 <strong>Hint:</strong> Watch out for integer division!
             </div>
+            <details class="solution">
+              <summary>Show Solution</summary>
+              <pre>
+double celsius = 25;
+double fahrenheit = (celsius * 9.0 / 5.0) + 32;
+Console.WriteLine(fahrenheit);</pre
+              >
+            </details>
+          </div>
+
+          <div class="bonus">
+            <h3>🚀 Practice More!</h3>
+            <ul>
+              <li>• Create a calculator that performs all basic operations</li>
+              <li>• Write a program to find the largest of 3 numbers</li>
+              <li>• Build a grade calculator (percentage to letter grade)</li>
+              <li>• Create a simple interest calculator</li>
+              <li>• Make a BMI (Body Mass Index) calculator</li>
+            </ul>
+          </div>
         </div>
+      </div>
     </div>
 
     <script>
-        var questions = [
-            {
-                question: "What will this code output?\n\nint x = 5;\nint y = 2;\nConsole.WriteLine(x / y);",
-                options: ["2.5", "2", "3", "Error"],
-                correct: 1,
-                explanation: "Integer division truncates decimals. 5/2 = 2 (not 2.5)"
-            },
-            {
-                question: "Which variable name is INVALID in C#?",
-                options: ["_myVar", "myVar2", "2myVar", "@class"],
-                correct: 2,
-                explanation: "Variable names cannot start with a digit. 2myVar is invalid."
-            },
-            {
-                question: "What's the result of: 10 % 3",
-                options: ["3", "1", "3.33", "0"],
-                correct: 1,
-                explanation: "The modulo operator (%) returns the remainder. 10 ÷ 3 = 3 remainder 1"
-            },
-            {
-                question: "Which converts string to int correctly?",
-                options: ["(int)strNum", "strNum.ToInt()", "Convert.ToInt32(strNum)", "int.Parse(strNum)"],
-                correct: 2,
-                explanation: "Convert.ToInt32() is the recommended method from the Convert class."
-            },
-            {
-                question: "What does this output?\n\nint a = 5;\nConsole.WriteLine(++a);",
-                options: ["5", "6", "4", "Error"],
-                correct: 1,
-                explanation: "++a (pre-increment) increases THEN returns value. So output is 6."
-            },
-            {
-                question: "Which is a reference type?",
-                options: ["int", "bool", "string", "double"],
-                correct: 2,
-                explanation: "string is a reference type. int, bool, and double are value types."
-            },
-            {
-                question: "What's wrong with: const int MAX;",
-                options: ["Missing semicolon", "const needs value at declaration", "MAX should be lowercase", "Nothing wrong"],
-                correct: 1,
-                explanation: "Constants MUST be initialized when declared: const int MAX = 100;"
-            },
-            {
-                question: "What does boxing do?",
-                options: ["Puts code in a box", "Converts value type to reference type", "Creates a container", "Wraps text"],
-                correct: 1,
-                explanation: "Boxing converts value types (like int) to reference types (object)."
-            },
-            {
-                question: "Result of: true && false || true",
-                options: ["true", "false", "Error", "null"],
-                correct: 0,
-                explanation: "false || true evaluates to true. && has higher precedence than ||."
-            },
-            {
-                question: "Which escape sequence creates a new line?",
-                options: ["\\t", "\\n", "\\r", "\\b"],
-                correct: 1,
-                explanation: "\\n is the newline character. \\t is tab, \\r is carriage return."
-            }
-        ];
+      var questions = [
+        {
+          question:
+            'What will this code output?\n\nint x = 5;\nint y = 2;\nConsole.WriteLine(x / y);',
+          options: ['2.5', '2', '3', 'Error'],
+          correct: 1,
+          explanation: 'Integer division truncates decimals. 5/2 = 2 (not 2.5)',
+        },
+        {
+          question: 'Which variable name is INVALID in C#?',
+          options: ['_myVar', 'myVar2', '2myVar', '@class'],
+          correct: 2,
+          explanation:
+            'Variable names cannot start with a digit. 2myVar is invalid.',
+        },
+        {
+          question: "What's the result of: 10 % 3",
+          options: ['3', '1', '3.33', '0'],
+          correct: 1,
+          explanation:
+            'The modulo operator (%) returns the remainder. 10 ÷ 3 = 3 remainder 1',
+        },
+        {
+          question: 'Which converts string to int correctly?',
+          options: [
+            '(int)strNum',
+            'strNum.ToInt()',
+            'Convert.ToInt32(strNum)',
+            'int.Parse(strNum)',
+          ],
+          correct: 2,
+          explanation:
+            'Convert.ToInt32() is the recommended method from the Convert class.',
+        },
+        {
+          question:
+            'What does this output?\n\nint a = 5;\nConsole.WriteLine(++a);',
+          options: ['5', '6', '4', 'Error'],
+          correct: 1,
+          explanation:
+            '++a (pre-increment) increases THEN returns value. So output is 6.',
+        },
+        {
+          question: 'Which is a reference type?',
+          options: ['int', 'bool', 'string', 'double'],
+          correct: 2,
+          explanation:
+            'string is a reference type. int, bool, and double are value types.',
+        },
+        {
+          question: "What's wrong with: const int MAX;",
+          options: [
+            'Missing semicolon',
+            'const needs value at declaration',
+            'MAX should be lowercase',
+            'Nothing wrong',
+          ],
+          correct: 1,
+          explanation:
+            'Constants MUST be initialized when declared: const int MAX = 100;',
+        },
+        {
+          question: 'What does boxing do?',
+          options: [
+            'Puts code in a box',
+            'Converts value type to reference type',
+            'Creates a container',
+            'Wraps text',
+          ],
+          correct: 1,
+          explanation:
+            'Boxing converts value types (like int) to reference types (object).',
+        },
+        {
+          question: 'Result of: true && false || true',
+          options: ['true', 'false', 'Error', 'null'],
+          correct: 0,
+          explanation:
+            'false || true evaluates to true. && has higher precedence than ||.',
+        },
+        {
+          question: 'Which escape sequence creates a new line?',
+          options: ['\\t', '\\n', '\\r', '\\b'],
+          correct: 1,
+          explanation:
+            '\\n is the newline character. \\t is tab, \\r is carriage return.',
+        },
+      ];
 
-        var userAnswers = {};
-        var showingResults = false;
+      var userAnswers = {};
+      var showingResults = false;
 
-        function showTab(tabName, btn) {
-            var tabs = document.querySelectorAll('.tab-content');
-            var btns = document.querySelectorAll('.tab-btn');
-            
-            for (var i = 0; i < tabs.length; i++) {
-                tabs[i].classList.remove('active');
-            }
-            for (var i = 0; i < btns.length; i++) {
-                btns[i].classList.remove('active');
-            }
-            
-            document.getElementById(tabName).classList.add('active');
-            btn.classList.add('active');
+      function showTab(tabName, btn) {
+        var tabs = document.querySelectorAll('.tab-content');
+        var btns = document.querySelectorAll('.tab-btn');
 
-            if (tabName === 'quiz' && !showingResults) {
-                renderQuiz();
-            }
+        for (var i = 0; i < tabs.length; i++) {
+          tabs[i].classList.remove('active');
+        }
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].classList.remove('active');
         }
 
-        function renderQuiz() {
-            var container = document.getElementById('quiz-questions');
-            container.innerHTML = '';
+        document.getElementById(tabName).classList.add('active');
+        btn.classList.add('active');
 
-            for (var qIdx = 0; qIdx < questions.length; qIdx++) {
-                var q = questions[qIdx];
-                var questionDiv = document.createElement('div');
-                questionDiv.className = 'question';
-                
-                var html = '<h3>Question ' + (qIdx + 1) + '</h3>';
-                html += '<div class="question-text">' + q.question + '</div>';
-                html += '<div class="options">';
-                
-                for (var oIdx = 0; oIdx < q.options.length; oIdx++) {
-                    html += '<div class="option" onclick="selectAnswer(' + qIdx + ', ' + oIdx + ')" id="q' + qIdx + 'o' + oIdx + '">';
-                    html += q.options[oIdx];
-                    html += '</div>';
-                }
-                
-                html += '</div>';
-                questionDiv.innerHTML = html;
-                container.appendChild(questionDiv);
+        if (tabName === 'quiz' && !showingResults) {
+          renderQuiz();
+        }
+      }
+
+      function renderQuiz() {
+        var container = document.getElementById('quiz-questions');
+        container.innerHTML = '';
+
+        for (var qIdx = 0; qIdx < questions.length; qIdx++) {
+          var q = questions[qIdx];
+          var questionDiv = document.createElement('div');
+          questionDiv.className = 'question';
+
+          var html = '<h3>Question ' + (qIdx + 1) + '</h3>';
+          html += '<div class="question-text">' + q.question + '</div>';
+          html += '<div class="options">';
+
+          for (var oIdx = 0; oIdx < q.options.length; oIdx++) {
+            html +=
+              '<div class="option" onclick="selectAnswer(' +
+              qIdx +
+              ', ' +
+              oIdx +
+              ')" id="q' +
+              qIdx +
+              'o' +
+              oIdx +
+              '">';
+            html += q.options[oIdx];
+            html += '</div>';
+          }
+
+          html += '</div>';
+          questionDiv.innerHTML = html;
+          container.appendChild(questionDiv);
+        }
+      }
+
+      function selectAnswer(qIdx, oIdx) {
+        if (showingResults) return;
+
+        userAnswers[qIdx] = oIdx;
+
+        for (var i = 0; i < 4; i++) {
+          var elem = document.getElementById('q' + qIdx + 'o' + i);
+          if (elem) elem.classList.remove('selected');
+        }
+
+        document
+          .getElementById('q' + qIdx + 'o' + oIdx)
+          .classList.add('selected');
+
+        var answerCount = Object.keys(userAnswers).length;
+        document.getElementById('submit-btn').disabled =
+          answerCount !== questions.length;
+      }
+
+      function submitQuiz() {
+        showingResults = true;
+        var correct = 0;
+
+        for (var qIdx = 0; qIdx < questions.length; qIdx++) {
+          var q = questions[qIdx];
+          if (userAnswers[qIdx] === q.correct) correct++;
+
+          for (var oIdx = 0; oIdx < q.options.length; oIdx++) {
+            var elem = document.getElementById('q' + qIdx + 'o' + oIdx);
+            elem.style.pointerEvents = 'none';
+
+            if (oIdx === q.correct) {
+              elem.classList.add('correct');
+            } else if (oIdx === userAnswers[qIdx]) {
+              elem.classList.add('incorrect');
             }
+          }
+
+          var questionDiv = document.querySelectorAll('.question')[qIdx];
+          var explanationDiv = document.createElement('div');
+          explanationDiv.className = 'explanation';
+          explanationDiv.innerHTML =
+            '<strong>💡 Explanation:</strong> ' + q.explanation;
+          questionDiv.appendChild(explanationDiv);
         }
 
-        function selectAnswer(qIdx, oIdx) {
-            if (showingResults) return;
-            
-            userAnswers[qIdx] = oIdx;
-            
-            for (var i = 0; i < 4; i++) {
-                var elem = document.getElementById('q' + qIdx + 'o' + i);
-                if (elem) elem.classList.remove('selected');
-            }
-            
-            document.getElementById('q' + qIdx + 'o' + oIdx).classList.add('selected');
-            
-            var answerCount = Object.keys(userAnswers).length;
-            document.getElementById('submit-btn').disabled = answerCount !== questions.length;
-        }
+        var container = document.getElementById('quiz-questions');
+        var scoreDiv = document.createElement('div');
+        scoreDiv.className = 'score';
+        var emoji =
+          correct === questions.length
+            ? '🎉'
+            : correct >= questions.length * 0.7
+            ? '👍'
+            : '💪';
+        var message =
+          correct === questions.length
+            ? 'Perfect Score!'
+            : correct >= questions.length * 0.7
+            ? 'Great job!'
+            : 'Keep practicing!';
 
-        function submitQuiz() {
-            showingResults = true;
-            var correct = 0;
+        scoreDiv.innerHTML =
+          '<h2>Quiz Results</h2>' +
+          '<div class="points">' +
+          correct +
+          ' / ' +
+          questions.length +
+          '</div>' +
+          '<p>' +
+          emoji +
+          ' ' +
+          message +
+          '</p>';
+        container.insertBefore(scoreDiv, container.firstChild);
 
-            for (var qIdx = 0; qIdx < questions.length; qIdx++) {
-                var q = questions[qIdx];
-                if (userAnswers[qIdx] === q.correct) correct++;
-                
-                for (var oIdx = 0; oIdx < q.options.length; oIdx++) {
-                    var elem = document.getElementById('q' + qIdx + 'o' + oIdx);
-                    elem.style.pointerEvents = 'none';
-                    
-                    if (oIdx === q.correct) {
-                        elem.classList.add('correct');
-                    } else if (oIdx === userAnswers[qIdx]) {
-                        elem.classList.add('incorrect');
-                    }
-                }
+        document.getElementById('submit-btn').style.display = 'none';
+        document.getElementById('reset-btn').style.display = 'block';
+      }
 
-                var questionDiv = document.querySelectorAll('.question')[qIdx];
-                var explanationDiv = document.createElement('div');
-                explanationDiv.className = 'explanation';
-                explanationDiv.innerHTML = '<strong>💡 Explanation:</strong> ' + q.explanation;
-                questionDiv.appendChild(explanationDiv);
-            }
-
-            var container = document.getElementById('quiz-questions');
-            var scoreDiv = document.createElement('div');
-            scoreDiv.className = 'score';
-            var emoji = correct === questions.length ? '🎉' : correct >= questions.length * 0.7 ? '👍' : '💪';
-            var message = correct === questions.length ? 'Perfect Score!' : 
-                           correct >= questions.length * 0.7 ? 'Great job!' : 'Keep practicing!';
-            
-            scoreDiv.innerHTML = '<h2>Quiz Results</h2>' +
-                '<div class="points">' + correct + ' / ' + questions.length + '</div>' +
-                '<p>' + emoji + ' ' + message + '</p>';
-            container.insertBefore(scoreDiv, container.firstChild);
-
-            document.getElementById('submit-btn').style.display = 'none';
-            document.getElementById('reset-btn').style.display = 'block';
-        }
-
-        function resetQuiz() {
-            userAnswers = {};
-            showingResults = false;
-            document.getElementById('submit-btn').style.display = 'block';
-            document.getElementById('submit-btn').disabled = true;
-            document.getElementById('reset-btn').style.display = 'none';
-            renderQuiz();
-        }
-
+      function resetQuiz() {
+        userAnswers = {};
+        showingResults = false;
+        document.getElementById('submit-btn').style.display = 'block';
+        document.getElementById('submit-btn').disabled = true;
+        document.getElementById('reset-btn').style.display = 'none';
         renderQuiz();
+      }
+
+      renderQuiz();
     </script>
-</body>
+  </body>
 </html>
