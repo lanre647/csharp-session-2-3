@@ -13,6 +13,18 @@ var questions = [
     explanation: 'Variable names cannot start with a digit. 2myVar is invalid.',
   },
   {
+    question: 'What is the default value of a bool in C#?',
+    options: ['true', 'false', 'null', '0'],
+    correct: 1,
+    explanation: 'The default value of a bool is false.',
+  },
+  {
+    question: 'What is the result of: 10 / 3',
+    options: ['3', '1', '3.33', '0'],
+    correct: 0,
+    explanation: 'Integer division truncates decimals. 10/3 = 3 (not 3.33)',
+  },
+  {
     question: "What's the result of: 10 % 3",
     options: ['3', '1', '3.33', '0'],
     correct: 1,
